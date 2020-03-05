@@ -9,7 +9,7 @@ from keras.optimizers import Adam
 np.random.seed(1)
 random.seed(1)
 
-MIN_EPSILON = 0.1
+MIN_EPSILON = 0.01
 
 class DQNAgent:
 
