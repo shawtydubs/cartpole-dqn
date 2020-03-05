@@ -26,12 +26,31 @@ def create_env():
 def create_dqn_agent(num_states, num_actions):
     return DQNAgent(num_states, num_actions)
 
+def end_step(epoch, step, start_time, max_avg_score, scores, runtimes):
+    epoch_score = step + 1
+    scores.append(epoch_score)
+    mean_score = round(np.mean(scores), 1)
+    max_avg_score = max(max_avg_score, mean_score)
+    runtimes.append(time.time() - start_time)
+    print(f'Epoch: {epoch + 1}/1000 | Epoch Score: {epoch_score} | Avg Score: {mean_score} | Max Avg Score: {max_avg_score}')
+
+    if mean_score >= WINNING_SCORE and len(scores) >= NUM_SCORES:
+        print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
+        print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
+        exit()
+
+    if epoch == EPOCHS - 1:
+        print(f'Not solved.')
+        print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
+
+    return scores, runtimes, max_avg_score
+
 def run_cartpole():
     env, num_states, num_actions = create_env()
     dqn_agent = create_dqn_agent(num_states, num_actions)
     scores = deque(maxlen=NUM_SCORES)
     runtimes = []
-    max_score = 0
+    max_avg_score = 0
 
     for epoch in range(EPOCHS):
         start_time = time.time()
@@ -47,22 +66,7 @@ def run_cartpole():
             state = new_state
 
             if done:
-                epcoh_score = step + 1
-                scores.append(epcoh_score)
-                mean_score = round(np.mean(scores), 1)
-                max_score = max(max_score, epcoh_score)
-                runtimes.append(time.time() - start_time)
-                print(f'Epoch: {epoch + 1}/1000 | Epoch Score: {epcoh_score} | Avg Score: {mean_score} | Max Score: {max_score}')
-
-                if mean_score >= WINNING_SCORE and len(scores) >= NUM_SCORES:
-                    print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
-                    print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
-                    exit()
-
-                if epoch == EPOCHS - 1:
-                    print(f'Not solved.')
-                    print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
-
+                scores, runtimes, max_avg_score = end_step(epoch, step, start_time, max_avg_score, scores, runtimes)
                 break
 
             dqn_agent.replay()
