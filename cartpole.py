@@ -4,8 +4,13 @@ from collections import deque
 
 from dqn import DQNAgent
 
+EPOCHS = 1000
+MAX_STEPS = 500
+NUM_SCORES = 100
+WINNING_SCORE = 475
+
 def create_env():
-    env = gym.make('CartPole-v0')
+    env = gym.make('CartPole-v1')
     num_states = env.observation_space.shape[0]
     num_actions = env.action_space.n
 
@@ -17,12 +22,12 @@ def create_dqn_agent(num_states, num_actions):
 def run_cartpole():
     env, num_states, num_actions = create_env()
     dqn_agent = create_dqn_agent(num_states, num_actions)
-    scores = deque(maxlen=100)
+    scores = deque(maxlen=NUM_SCORES)
 
-    for epoch in range(1000):
+    for epoch in range(EPOCHS):
         state = np.reshape(env.reset(), [1, num_states])
 
-        for step in range(200):
+        for step in range(MAX_STEPS):
             action = dqn_agent.get_action(state)
             new_state, reward, done, _ = env.step(action)
 
@@ -37,7 +42,7 @@ def run_cartpole():
                 mean_score = round(np.mean(scores), 1)
                 print(f'Epoch: {epoch}/1000 | Last step: {step} | Avg Step: {mean_score}')
 
-                if mean_score > 195 and len(scores) > 100:
+                if mean_score > WINNING_SCORE and len(scores) > NUM_SCORES:
                     print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
                     exit()
 
