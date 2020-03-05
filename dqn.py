@@ -37,7 +37,7 @@ class DQNAgent:
         return model
 
     def get_action(self, state):
-        if np.random.random() < self.epsilon:
+        if np.random.rand() < self.epsilon:
             return np.random.randint(0, self.num_actions)
 
         q_values = self.model.predict(state)
@@ -58,5 +58,6 @@ class DQNAgent:
             q_values[0][action] = q_update
             self.model.fit(state, q_values, verbose=0)
 
-        self.epsilon *= self.epsilon_decay
-        self.epsilon = max(MIN_EPSILON, self.epsilon)
+        if self.epsilon > MIN_EPSILON:
+            self.epsilon = max(MIN_EPSILON, self.epsilon * self.epsilon_decay)
+

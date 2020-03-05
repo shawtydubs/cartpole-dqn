@@ -5,9 +5,9 @@ from collections import deque
 
 from dqn import DQNAgent
 
-ENV = 'CartPole-v0'
-WINNING_SCORE = 195
-MAX_STEPS = 200
+# ENV = 'CartPole-v0'
+# WINNING_SCORE = 195
+# MAX_STEPS = 200
 
 ENV = 'CartPole-v1'
 WINNING_SCORE = 475
@@ -31,6 +31,7 @@ def run_cartpole():
     dqn_agent = create_dqn_agent(num_states, num_actions)
     scores = deque(maxlen=NUM_SCORES)
     runtimes = []
+    max_score = 0
 
     for epoch in range(EPOCHS):
         start_time = time.time()
@@ -39,16 +40,19 @@ def run_cartpole():
         for step in range(MAX_STEPS):
             action = dqn_agent.get_action(state)
             new_state, reward, done, _ = env.step(action)
+            reward = reward if not done else -reward
             new_state = np.reshape(new_state, [1, num_states])
 
             dqn_agent.memoize(state, action, reward, new_state, done)
             state = new_state
 
             if done:
-                scores.append(step)
+                epcoh_score = step + 1
+                scores.append(epcoh_score)
                 mean_score = round(np.mean(scores), 1)
+                max_score = max(max_score, epcoh_score)
                 runtimes.append(time.time() - start_time)
-                print(f'Epoch: {epoch + 1}/1000 | Score: {step} | Avg Score: {mean_score} | Explore rate: {round(dqn_agent.epsilon, 4)}')
+                print(f'Epoch: {epoch + 1}/1000 | Epoch Score: {epcoh_score} | Avg Score: {mean_score} | Max Score: {max_score}')
 
                 if mean_score >= WINNING_SCORE and len(scores) >= NUM_SCORES:
                     print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
@@ -56,7 +60,7 @@ def run_cartpole():
                     exit()
 
                 if epoch == EPOCHS - 1:
-                    print(f'Not solved. Mean score of last 100 epochs was {mean_score}')
+                    print(f'Not solved.')
                     print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
 
                 break
