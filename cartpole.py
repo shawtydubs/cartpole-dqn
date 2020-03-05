@@ -4,13 +4,19 @@ from collections import deque
 
 from dqn import DQNAgent
 
-EPOCHS = 1000
-MAX_STEPS = 200
-NUM_SCORES = 100
+ENV = 'CartPole-v0'
 WINNING_SCORE = 195
+MAX_STEPS = 200
+
+ENV = 'CartPole-v1'
+WINNING_SCORE = 475
+MAX_STEPS = 500
+
+EPOCHS = 1000
+NUM_SCORES = 100
 
 def create_env():
-    env = gym.make('CartPole-v0')
+    env = gym.make(ENV)
     num_states = env.observation_space.shape[0]
     num_actions = env.action_space.n
 
