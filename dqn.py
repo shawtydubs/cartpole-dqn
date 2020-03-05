@@ -59,4 +59,4 @@ class DQNAgent:
             self.model.fit(state, q_values, verbose=0)
 
         self.epsilon *= self.epsilon_decay
-        self.epsilon = max(0.1, self.epsilon)
+        self.epsilon = max(MIN_EPSILON, self.epsilon)
