@@ -9,6 +9,8 @@ from keras.optimizers import Adam
 np.random.seed(1)
 random.seed(1)
 
+MIN_EPSILON = 0.1
+
 class DQNAgent:
 
     def __init__(self, num_states, num_actions):
@@ -18,7 +20,7 @@ class DQNAgent:
         self.batch_size = 25
 
         self.alpha = 0.01
-        self.epsilon = 0.5
+        self.epsilon = 1.0
         self.epsilon_decay = 0.99
         self.gamma = 0.9
 
@@ -57,5 +59,4 @@ class DQNAgent:
             self.model.fit(state, q_values, verbose=0)
 
         self.epsilon *= self.epsilon_decay
-
-
+        self.epsilon = max(0.1, self.epsilon)
