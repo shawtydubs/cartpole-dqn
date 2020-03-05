@@ -1,5 +1,6 @@
 import gym
 import numpy as np
+import time
 from collections import deque
 
 from dqn import DQNAgent
@@ -29,8 +30,10 @@ def run_cartpole():
     env, num_states, num_actions = create_env()
     dqn_agent = create_dqn_agent(num_states, num_actions)
     scores = deque(maxlen=NUM_SCORES)
+    runtimes = []
 
     for epoch in range(EPOCHS):
+        start_time = time.time()
         state = np.reshape(env.reset(), [1, num_states])
 
         for step in range(MAX_STEPS):
@@ -44,11 +47,17 @@ def run_cartpole():
             if done:
                 scores.append(step)
                 mean_score = round(np.mean(scores), 1)
-                print(f'Epoch: {epoch}/1000 | Score: {step} | Avg Score: {mean_score} | Explore rate: {round(dqn_agent.epsilon, 4)}')
+                runtimes.append(start_time - time.time())
+                print(f'Epoch: {epoch + 1}/1000 | Score: {step} | Avg Score: {mean_score} | Explore rate: {round(dqn_agent.epsilon, 4)}')
 
                 if mean_score > WINNING_SCORE and len(scores) > NUM_SCORES:
                     print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
+                    print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
                     exit()
+
+                if epoch == EPOCHS - 1:
+                    print(f'Not solved. Mean score of last 100 epochs was {mean_score}')
+                    print(f'Runtime: {np.sum(runtimes)} | Avg runtime: {np.mean(runtimes)}')
 
                 break
 
