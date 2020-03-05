@@ -30,8 +30,6 @@ def run_cartpole():
         for step in range(MAX_STEPS):
             action = dqn_agent.get_action(state)
             new_state, reward, done, _ = env.step(action)
-
-            reward = reward if not done else -reward
             new_state = np.reshape(new_state, [1, num_states])
 
             dqn_agent.memoize(state, action, reward, new_state, done)

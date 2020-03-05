@@ -17,14 +17,14 @@ class DQNAgent:
         self.num_states = num_states
         self.num_actions = num_actions
 
-        self.batch_size = 25
+        self.batch_size = 20
 
-        self.alpha = 0.01
+        self.alpha = 0.001
         self.epsilon = 1.0
-        self.epsilon_decay = 0.99
-        self.gamma = 0.9
+        self.epsilon_decay = 0.995
+        self.gamma = 0.95
 
-        self.memory = deque(maxlen=20000)
+        self.memory = deque(maxlen=1000000)
         self.model = self._build_model()
 
     def _build_model(self):
