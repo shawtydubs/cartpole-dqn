@@ -51,11 +51,9 @@ class DQNAgent:
         minibatch = random.sample(self.memory, self.batch_size)
 
         for state, action, reward, new_state, done in minibatch:
-            new_state_q_values = self.model.predict(new_state)[0]
-            q_update = reward if done else reward + self.gamma * np.argmax(new_state_q_values)
+            q_update = reward if done else (reward + self.gamma * (self.model.predict(new_state)[0]).max())
             q_values = self.model.predict(state)
             q_values[0][action] = q_update
-
             self.model.fit(state, q_values, verbose=0)
 
         self.epsilon *= self.epsilon_decay
