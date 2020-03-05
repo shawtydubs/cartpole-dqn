@@ -40,7 +40,7 @@ def run_cartpole():
             if done:
                 scores.append(step)
                 mean_score = round(np.mean(scores), 1)
-                print(f'Epoch: {epoch}/1000 | Last step: {step} | Avg Step: {mean_score}')
+                print(f'Epoch: {epoch}/1000 | Last step: {step} | Avg Step: {mean_score} | Explore rate: {dqn_agent.epsilon}')
 
                 if mean_score > WINNING_SCORE and len(scores) > NUM_SCORES:
                     print(f'Solved in {epoch} epochs with a mean score of {mean_score}')

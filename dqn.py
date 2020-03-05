@@ -57,6 +57,7 @@ class DQNAgent:
             q_values[0][action] = q_update
 
             self.model.fit(state, q_values, verbose=0)
-            self.epsilon * self.epsilon_decay
+
+        self.epsilon *= self.epsilon_decay
 
 
