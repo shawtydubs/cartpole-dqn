@@ -1,9 +1,13 @@
 import numpy as np
+import random
 
 from collections import deque
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.optimizers import Adam
+
+np.random.seed(1)
+random.seed(1)
 
 class DQNAgent:
 
@@ -15,6 +19,7 @@ class DQNAgent:
 
         self.alpha = 0.01
         self.epsilon = 0.5
+        self.epsilon_decay = 0.99
         self.gamma = 0.9
 
         self.memory = deque(maxlen=20000)
@@ -43,7 +48,7 @@ class DQNAgent:
         if len(self.memory) < self.batch_size:
             return
 
-        minibatch = np.random.choice(self.memory, self.batch_size)
+        minibatch = random.sample(self.memory, self.batch_size)
 
         for state, action, reward, new_state, done in minibatch:
             new_state_q_values = self.model.predict(new_state)[0]
@@ -52,5 +57,6 @@ class DQNAgent:
             q_values[0][action] = q_update
 
             self.model.fit(state, q_values, verbose=0)
+            self.epsilon * self.epsilon_decay
 
 
