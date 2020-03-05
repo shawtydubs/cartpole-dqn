@@ -5,12 +5,12 @@ from collections import deque
 from dqn import DQNAgent
 
 EPOCHS = 1000
-MAX_STEPS = 500
+MAX_STEPS = 200
 NUM_SCORES = 100
-WINNING_SCORE = 475
+WINNING_SCORE = 195
 
 def create_env():
-    env = gym.make('CartPole-v1')
+    env = gym.make('CartPole-v0')
     num_states = env.observation_space.shape[0]
     num_actions = env.action_space.n
 
