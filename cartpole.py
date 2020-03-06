@@ -5,15 +5,15 @@ from collections import deque
 
 from dqn import DQNAgent
 
-# ENV = 'CartPole-v0'
-# WINNING_SCORE = 195
-# MAX_STEPS = 200
+ENV = 'CartPole-v0'
+WINNING_SCORE = 195
+MAX_STEPS = 200
 
-ENV = 'CartPole-v1'
-WINNING_SCORE = 475
-MAX_STEPS = 500
+# ENV = 'CartPole-v1'
+# WINNING_SCORE = 475
+# MAX_STEPS = 500
 
-EPOCHS = 1000
+EPOCHS = 10000
 NUM_SCORES = 100
 
 def create_env():
@@ -32,7 +32,7 @@ def end_step(epoch, step, start_time, max_avg_score, scores, runtimes):
     mean_score = round(np.mean(scores), 1)
     max_avg_score = max(max_avg_score, mean_score)
     runtimes.append(time.time() - start_time)
-    print(f'Epoch: {epoch + 1}/1000 | Epoch Score: {epoch_score} | Avg Score: {mean_score} | Max Avg Score: {max_avg_score}')
+    print(f'Epoch: {epoch + 1}/{EPOCHS} | Epoch Score: {epoch_score} | Avg Score: {mean_score} | Max Avg Score: {max_avg_score}')
 
     if mean_score >= WINNING_SCORE and len(scores) >= NUM_SCORES:
         print(f'Solved in {epoch} epochs with a mean score of {mean_score}')
