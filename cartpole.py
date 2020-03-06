@@ -18,6 +18,7 @@ NUM_SCORES = 100
 
 def create_env():
     env = gym.make(ENV)
+    env.seed(1)
     num_states = env.observation_space.shape[0]
     num_actions = env.action_space.n
 

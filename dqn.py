@@ -6,6 +6,8 @@ from keras.layers import Dense
 from keras.models import Sequential
 from keras.optimizers import Adam
 
+np.random.seed(1)
+
 MIN_EPSILON = 0.01
 
 class DQNAgent:
